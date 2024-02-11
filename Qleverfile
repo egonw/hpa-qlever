@@ -14,24 +14,25 @@
 # also TEXT_DESCRIPTION).
 [data]
 NAME              = sbd4nano
-GET_DATA_CMD      = wget https://raw.githubusercontent.com/h2020-sbd4nano/sbd-data-landscape-opendata/main/open.ttl
-# INDEX_DESCRIPTION = SbD4Nano Semantic Landscape (Open)
-# TEXT_DESCRIPTION  = SbD4Nano Semantic Landscape content with an open license
+GET_DATA_CMD      = wget -nc https://raw.githubusercontent.com/h2020-sbd4nano/sbd-data-landscape-opendata/main/open.ttl && \
+    cat open.ttl | grep ^@prefix | tr -s ' ' | sort -u > ${NAME}.prefix-definitions
+INDEX_DESCRIPTION = SbD4Nano Semantic Landscape (Open)
+TEXT_DESCRIPTION  = SbD4Nano Semantic Landscape content with an open license
 
 # As a minimum, you need to define CAT_FILES, which is the command that produces
 # the TTL that will be piped into QLever's index builder. Use SETTINGS_JSON for
 # more advanced configuration settings.
 [index]
 FILE_NAMES    = open.ttl
-CAT_FILES     = cat ${FILE_NAMES}
-# SETTINGS_JSON =
+CAT_FILES     = cat ${data:NAME}.prefix-definitions ${FILE_NAMES}
+SETTINGS_JSON = { "languages-internal": ["en"], "prefixes-external": [ "<http://purl.uniprot.org/uniprot/" ], "locale": { "language": "en", "country": "US", "ignore-punctuation": true }, "ascii-prefixes-only": true, "num-triples-per-partial-vocab": 20000000 }
 
 # As a minimum, you need to specify the PORT, where QLever will listen for
 # SPARQL queries. If you want to send priviledged commands to the server, you
 # need to specify ACCESS_TOKEN (modify the random number below).
 [server]
 PORT = 7001
-# ACCESS_TOKEN = ${data:NAME}_1234567890
+#ACCESS_TOKEN = ${data:NAME}_
 
 # With USE_DOCKER = true, the qlever script will download the docker image for
 # you and run QLever inside docker containers. With USE_DOCKER = false, you need 
@@ -44,4 +45,5 @@ IMAGE      = adfreiburg/qlever
 # where the UI is running. The UI is run inside a docker container.
 [ui]
 PORT  = 7000
+CONFIG = default
 IMAGE = adfreiburg/qlever-ui
