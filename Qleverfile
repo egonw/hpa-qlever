@@ -15,7 +15,9 @@
 [data]
 NAME              = sbd4nano
 GET_DATA_CMD      = wget -nc https://raw.githubusercontent.com/h2020-sbd4nano/sbd-data-landscape-opendata/main/open.ttl && \
-    cat open.ttl | grep ^@prefix | tr -s ' ' | sort -u > ${NAME}.prefix-definitions
+    cat open.ttl | grep ^@prefix | tr -s ' ' | sort -u > ${NAME}.prefix-definitions && \
+    cat open.ttl | grep -v ^@prefix > open.ttl.noprefixes && \
+    mv open.ttl.noprefixes open.ttl
 INDEX_DESCRIPTION = SbD4Nano Semantic Landscape (Open)
 TEXT_DESCRIPTION  = SbD4Nano Semantic Landscape content with an open license
 
