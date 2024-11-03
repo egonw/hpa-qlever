@@ -17,7 +17,9 @@ pipx install qlever
 Then the data can be downloaded and indexed:
 
 ```
-~/.local/bin/qlever get-data
-~/.local/bin/qlever index
+qlever get-data
+qlever index
+qlever start
+qlever ui
 ```
 

@@ -1,51 +1,26 @@
-# Automatically created by the "qlever" script
-#
-# Modify as you see fit. Beware that some of the values below are executed as
-# commands  by the script.
-#
-# If you have never seen a Qleverfile before, we recommend that you look at the
-# pre-filled Qleverfiles on http://qlever.cs.uni-freiburg.de/qlever-control/
-# Qleverfiles first to get some inspiration. Or execute `qlever setup-config
-# <config name>` with a config name of your choice.
-
-# As a minimum, each dataset needs a name. If you want `qlever get-data` to do
-# something meaningful, you need to define GET_DATA_CMD. If you want to use the
-# QLever UI, you should define INDEX_DESCRIPTION (and if you have a text index,
-# also TEXT_DESCRIPTION).
 [data]
-NAME              = sbd4nano
-GET_DATA_CMD      = wget -nc https://raw.githubusercontent.com/h2020-sbd4nano/sbd-data-landscape-opendata/main/open.ttl && \
-    cat open.ttl | grep ^@prefix | tr -s ' ' | sort -u > ${NAME}.prefix-definitions && \
-    cat open.ttl | grep -v ^@prefix > open.ttl.noprefixes && \
-    mv open.ttl.noprefixes open.ttl
-INDEX_DESCRIPTION = SbD4Nano Semantic Landscape (Open)
-TEXT_DESCRIPTION  = SbD4Nano Semantic Landscape content with an open license
+NAME              = hpa
+BASE_URL          = https://github.com/wallscope/olympics-rdf
+GET_DATA_CMD      = cat proteinatlas.ttl | sed 's/"23.0"^^xsd:intege/"23"^^xsd:intege/' > hpa.ttl
+DESCRIPTION       = Human Protein Atlas as NanoPublications
+TEXT_DESCRIPTION  = All literals, search with FILTER CONTAINS(?var, "...")
 
-# As a minimum, you need to define CAT_FILES, which is the command that produces
-# the TTL that will be piped into QLever's index builder. Use SETTINGS_JSON for
-# more advanced configuration settings.
 [index]
-FILE_NAMES    = open.ttl
-CAT_FILES     = cat ${data:NAME}.prefix-definitions ${FILE_NAMES}
-SETTINGS_JSON = { "languages-internal": ["en"], "prefixes-external": [ "<http://purl.uniprot.org/uniprot/" ], "locale": { "language": "en", "country": "US", "ignore-punctuation": true }, "ascii-prefixes-only": true, "num-triples-per-partial-vocab": 20000000 }
+INPUT_FILES     = hpa.ttl
+CAT_INPUT_FILES = cat ${INPUT_FILES}
+SETTINGS_JSON   = { "ascii-prefixes-only": false, "num-triples-per-batch": 100000 }
 
-# As a minimum, you need to specify the PORT, where QLever will listen for
-# SPARQL queries. If you want to send priviledged commands to the server, you
-# need to specify ACCESS_TOKEN (modify the random number below).
 [server]
-PORT = 7001
-#ACCESS_TOKEN = ${data:NAME}_
+PORT               = 7019
+#ACCESS_TOKEN       = ${data:NAME}_7643543846_giTcoI3rwM0b
+MEMORY_FOR_QUERIES = 5G
+CACHE_MAX_SIZE     = 2G
+TIMEOUT            = 30s
 
-# With USE_DOCKER = true, the qlever script will download the docker image for
-# you and run QLever inside docker containers. With USE_DOCKER = false, you need 
-# the QLever binaries in the PATH of your sheel.
-[docker]
-USE_DOCKER = true
-IMAGE      = adfreiburg/qlever
+[runtime]
+#SYSTEM = native
+SYSTEM = docker
+IMAGE  = docker.io/adfreiburg/qlever:latest
 
-# If you want to use the QLever UI, as a minimum you need to specify the PORT
-# where the UI is running. The UI is run inside a docker container.
 [ui]
-PORT  = 7000
-CONFIG = default
-IMAGE = adfreiburg/qlever-ui
+UI_CONFIG = default
