@@ -1,6 +1,6 @@
 [data]
 NAME              = hpa
-BASE_URL          = https://github.com/wallscope/olympics-rdf
+BASE_URL          = https://www.proteinatlas.org/
 GET_DATA_CMD      = cat proteinatlas.ttl | sed 's/"23.0"^^xsd:intege/"23"^^xsd:intege/' > hpa.ttl
 DESCRIPTION       = Human Protein Atlas as NanoPublications
 TEXT_DESCRIPTION  = All literals, search with FILTER CONTAINS(?var, "...")
