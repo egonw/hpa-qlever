@@ -1,7 +1,11 @@
-# QLever files for the Open SbD4Nano Semantic Landscape data
+# QLever files for the Human Protein Atlas Nanopublications
 
 This repository contains the `Qleverfile` to start a local [QLever](https://github.com/ad-freiburg/qlever/) server.
-It automatically loads the data from [this SbD4Nano repository](https://github.com/h2020-sbd4nano/sbd-data-landscape-opendata/blob/main/open.ttl).
+
+The data is CC-BY and comes from https://www.proteinatlas.org/about/download
+
+The https://www.proteinatlas.org/download/proteinatlas.trig.gz file can be gunziped and then converted
+with the Groovy script in this repository.
 
 ## Creating and starting
 
